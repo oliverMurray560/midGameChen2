@@ -20,12 +20,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         player = (self.childNode(withName: "player") as! SKSpriteNode)
-        car = (self.childNode(withName: "car") as! SKSpriteNode)
         invisFollower = (self.childNode(withName: "follower") as! SKSpriteNode)
         self.camera = cam
         self.physicsWorld.contactDelegate = self
         invisFollower.position.x = player.position.x
         invisFollower.position.y = player.position.y
+        
 
         
     }
@@ -42,7 +42,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         }
 
-        drive()
+        enumerateChildNodes(withName: "car") { [self]
+                         (node, _) in
+            car = node as? SKSpriteNode
+            car.physicsBody?.velocity.dx = -400
+            if car.position.x < -480{
+                car.position.x = 480
+            }
+
+        }
+
         
         
         
