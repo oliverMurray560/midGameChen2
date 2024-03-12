@@ -61,7 +61,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         
         if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car"){
-
+            player.physicsBody?.allowsRotation = true
+            player.physicsBody?.friction = 0.5
             gameOver = true
             GameOver()
             
@@ -87,10 +88,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.physicsBody?.friction = 0
             let jumpAction = SKAction.moveBy(x: 0, y: 100, duration: 0.3)
             player.run(jumpAction)
-        }
-        else{
-            player.physicsBody?.allowsRotation = true
-            player.physicsBody?.friction = 0.5
         }
     }
     func GameOver(){
