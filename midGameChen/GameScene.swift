@@ -9,23 +9,37 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    var hi = 0
     var player: SKSpriteNode!
     var car: SKSpriteNode!
     let cam = SKCameraNode()
     var gameOver = false
     var restriction = false
+    var winLoseOutlet: SKLabelNode!
 
 
     var invisFollower: SKSpriteNode!
     
     override func didMove(to view: SKView) {
+        winLoseOutlet = (self.childNode(withName: "statusLabel") as! SKLabelNode)
+        winLoseOutlet.fontSize = 100
+        winLoseOutlet.text = ""
         player = (self.childNode(withName: "player") as! SKSpriteNode)
         invisFollower = (self.childNode(withName: "follower") as! SKSpriteNode)
         self.camera = cam
         self.physicsWorld.contactDelegate = self
         invisFollower.position.x = player.position.x
         invisFollower.position.y = player.position.y
-        
+        winLoseOutlet.position.x = player.position.x
+        enumerateChildNodes(withName: "car") { [self]
+                         (node, _) in
+            car = node as? SKSpriteNode
+            car.texture = SKTexture(imageNamed: "car")
+            car.size.width = 80
+            car.size.height = 60
+            car.physicsBody?.mass = 1000
+
+        }
 
         
     }
@@ -34,9 +48,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         cam.position.x = invisFollower.position.x
         cam.position.y = invisFollower.position.y + 500
+        winLoseOutlet.position.y = player.position.y + 200
         
         if (player.position.y >= invisFollower.position.y + 600){
-            print("moving")
             let moveFollower = SKAction.moveTo(y: player.position.y, duration: 1)
             invisFollower.run(moveFollower)
 
@@ -45,7 +59,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enumerateChildNodes(withName: "car") { [self]
                          (node, _) in
             car = node as? SKSpriteNode
-            car.physicsBody?.velocity.dx = -400
+            car.physicsBody?.velocity.dx = -350
+            car.physicsBody?.velocity.dy = 0
             if car.position.x < -480{
                 car.position.x = 480
             }
@@ -61,6 +76,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         
         if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car"){
+            winLoseOutlet.text = "You Died"
             player.physicsBody?.allowsRotation = true
             player.physicsBody?.friction = 0.5
             gameOver = true
@@ -84,8 +100,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func jump(){
         if gameOver == false{
-            player.physicsBody?.allowsRotation = false
-            player.physicsBody?.friction = 0
             let jumpAction = SKAction.moveBy(x: 0, y: 100, duration: 0.3)
             player.run(jumpAction)
         }
@@ -100,6 +114,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if car.position.x < -480{
             car.position.x = 480
         }
+    }
+    
+    func restart(){
+        player.physicsBody?.velocity.dx = 0
+        player.physicsBody?.velocity.dy = 0
+        gameOver = false
+        winLoseOutlet.text = ""
+        player.physicsBody?.friction = 0
+        player.zPosition = 0
+        player.zRotation = 0
+        player.physicsBody?.allowsRotation = false
+        player.position.y = -652
+        player.position.x = 0
+        invisFollower.position.y = player.position.y
     }
 
     

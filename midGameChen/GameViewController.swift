@@ -46,6 +46,9 @@ class GameViewController: UIViewController {
     @IBAction func jumpButton(_ sender: UIButton) {
         play.jump()
     }
+    @IBAction func restartAction(_ sender: UIButton) {
+        play.restart()
+    }
     override var prefersStatusBarHidden: Bool {
         return true
     }
