@@ -37,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             car.texture = SKTexture(imageNamed: "car")
             car.size.width = 80
             car.size.height = 60
-            car.physicsBody?.mass = 1000
+            car.physicsBody?.mass = 100000
 
         }
 
@@ -48,7 +48,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         cam.position.x = invisFollower.position.x
         cam.position.y = invisFollower.position.y + 500
-        winLoseOutlet.position.y = player.position.y + 200
+        winLoseOutlet.position.y = cam.position.y
         
         if (player.position.y >= invisFollower.position.y + 600){
             let moveFollower = SKAction.moveTo(y: player.position.y, duration: 1)
@@ -79,6 +79,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             winLoseOutlet.text = "You Died"
             player.physicsBody?.allowsRotation = true
             player.physicsBody?.friction = 0.5
+            player.removeAllActions()
             gameOver = true
             GameOver()
             
@@ -128,6 +129,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position.y = -652
         player.position.x = 0
         invisFollower.position.y = player.position.y
+        player.removeAllActions()
+        invisFollower.removeAllActions()
     }
 
     
