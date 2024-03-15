@@ -9,18 +9,22 @@ import SpriteKit
 import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    var hi = 0
     var player: SKSpriteNode!
     var car: SKSpriteNode!
+    var car2: SKSpriteNode!
     let cam = SKCameraNode()
     var gameOver = false
-    var restriction = false
     var winLoseOutlet: SKLabelNode!
-
+    var timeLabel: SKLabelNode!
+    var gameTimer = 0
+    var timer = Timer()
 
     var invisFollower: SKSpriteNode!
     
     override func didMove(to view: SKView) {
+        startTimer()
+        timeLabel = (self.childNode(withName: "timeLabel") as! SKLabelNode)
+        timeLabel.fontSize = 30
         winLoseOutlet = (self.childNode(withName: "statusLabel") as! SKLabelNode)
         winLoseOutlet.fontSize = 100
         winLoseOutlet.text = ""
@@ -31,6 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         invisFollower.position.x = player.position.x
         invisFollower.position.y = player.position.y
         winLoseOutlet.position.x = player.position.x
+        
         enumerateChildNodes(withName: "car") { [self]
                          (node, _) in
             car = node as? SKSpriteNode
@@ -41,11 +46,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         }
 
+        enumerateChildNodes(withName: "car2") { [self]
+                         (node, _) in
+            car2 = node as? SKSpriteNode
+            car2.texture = SKTexture(imageNamed: "car22")
+            car2.size.width = 80
+            car2.size.height = 60
+            car2.physicsBody?.mass = 100000
+
+        }
+        
         
     }
         
     override func update(_ currentTime: TimeInterval) {
-        
+        timeLabel.text = "Time: \(gameTimer)"
+        timeLabel.position.y = cam.position.y + 550
+        timeLabel.position.x = cam.position.x + 200
         cam.position.x = invisFollower.position.x
         cam.position.y = invisFollower.position.y + 500
         winLoseOutlet.position.y = cam.position.y
@@ -66,6 +83,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
 
         }
+        
+        enumerateChildNodes(withName: "car2") { [self]
+                         (node, _) in
+            car2 = node as? SKSpriteNode
+            car2.physicsBody?.velocity.dx = 350
+            car2.physicsBody?.velocity.dy = 0
+            if car2.position.x > 480{
+                car2.position.x = -480
+            }
+
+        }
+
 
         
         
@@ -76,6 +105,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         
         if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car"){
+            winLoseOutlet.text = "You Died"
+            player.physicsBody?.allowsRotation = true
+            player.physicsBody?.friction = 0.5
+            player.removeAllActions()
+            gameOver = true
+            GameOver()
+            
+            
+            }
+        
+        if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car2") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car2"){
             winLoseOutlet.text = "You Died"
             player.physicsBody?.allowsRotation = true
             player.physicsBody?.friction = 0.5
@@ -97,8 +137,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     
+    func startTimer()  {
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+    }
     
-    
+    @objc func updateTimer(){
+        gameTimer += 1
+    }
     func jump(){
         if gameOver == false{
             let jumpAction = SKAction.moveBy(x: 0, y: 100, duration: 0.3)
@@ -107,14 +152,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     func GameOver(){
         player.physicsBody?.velocity.dy = 0
-        restriction = true
+
     
-    }
-    func drive(){
-        car.physicsBody?.velocity.dx = -500
-        if car.position.x < -480{
-            car.position.x = 480
-        }
     }
     
     func restart(){
@@ -131,6 +170,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         invisFollower.position.y = player.position.y
         player.removeAllActions()
         invisFollower.removeAllActions()
+        gameTimer = 0
     }
 
     
