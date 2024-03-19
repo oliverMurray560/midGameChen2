@@ -78,6 +78,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             car = node as? SKSpriteNode
             car.physicsBody?.velocity.dx = -350
             car.physicsBody?.velocity.dy = 0
+            
             if car.position.x < -480{
                 car.position.x = 480
             }
@@ -89,6 +90,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             car2 = node as? SKSpriteNode
             car2.physicsBody?.velocity.dx = 350
             car2.physicsBody?.velocity.dy = 0
+            
+            
             if car2.position.x > 480{
                 car2.position.x = -480
             }
@@ -101,28 +104,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func crash(){
+        winLoseOutlet.text = "You Died"
+        player.physicsBody?.allowsRotation = true
+        player.physicsBody?.friction = 0.5
+        player.removeAllActions()
+        gameOver = true
+        GameOver()
+    }
 
     func didBegin(_ contact: SKPhysicsContact) {
         
         if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car"){
-            winLoseOutlet.text = "You Died"
-            player.physicsBody?.allowsRotation = true
-            player.physicsBody?.friction = 0.5
-            player.removeAllActions()
-            gameOver = true
-            GameOver()
             
+            crash()
             
             }
         
         if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car2") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car2"){
-            winLoseOutlet.text = "You Died"
-            player.physicsBody?.allowsRotation = true
-            player.physicsBody?.friction = 0.5
-            player.removeAllActions()
-            gameOver = true
-            GameOver()
             
+            crash()
             
             }
             
@@ -169,6 +170,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position.x = 0
         invisFollower.position.y = player.position.y
         player.removeAllActions()
+        let rotateAction = SKAction.rotate(toAngle: 0, duration: 0)
+        player.run(rotateAction)
         invisFollower.removeAllActions()
         gameTimer = 0
     }
