@@ -17,6 +17,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var car4: SKSpriteNode!
     var car5: SKSpriteNode!
     var car6: SKSpriteNode!
+    var car7: SKSpriteNode!
+    var car8: SKSpriteNode!
     let cam = SKCameraNode()
     var gameOver = false
     var winLoseOutlet: SKLabelNode!
@@ -69,8 +71,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                          (node, _) in
             car3 = node as? SKSpriteNode
             car3.texture = SKTexture(imageNamed: "car3")
-            car3.size.width = 80
-            car3.size.height = 60
+            car3.size.width = 141.008
+            car3.size.height = 90.07
             car3.physicsBody?.mass = 100000
 
         }
@@ -79,8 +81,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                          (node, _) in
             car4 = node as? SKSpriteNode
             car4.texture = SKTexture(imageNamed: "car4")
-            car4.size.width = 80
-            car4.size.height = 60
+            car4.size.width = 175.001
+            car4.size.height = 100.119
             car4.physicsBody?.mass = 100000
 
         }
@@ -89,8 +91,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                          (node, _) in
             car5 = node as? SKSpriteNode
             car5.texture = SKTexture(imageNamed: "car5")
-            car5.size.width = 80
-            car5.size.height = 60
+            car5.size.width = 113.976
+            car5.size.height = 60.289
             car5.physicsBody?.mass = 100000
 
         }
@@ -103,6 +105,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             car6.size.width = 80
             car6.size.height = 60
             car6.physicsBody?.mass = 100000
+
+        }
+        
+        enumerateChildNodes(withName: "car7") { [self]
+                         (node, _) in
+            car7 = node as? SKSpriteNode
+            car7.texture = SKTexture(imageNamed: "car7")
+            car7.size.width = 400.0
+            car7.size.height = 60.289
+            car7.physicsBody?.mass = 100000
+
+        }
+        
+        enumerateChildNodes(withName: "car8") { [self]
+                         (node, _) in
+            car8 = node as? SKSpriteNode
+            car8.texture = SKTexture(imageNamed: "car8")
+            car8.size.width = 452.08
+            car8.size.height = 127.072
+            car8.physicsBody?.mass = 100000
 
         }
         
@@ -139,15 +161,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         enumerateChildNodes(withName: "car5") { [self]
                          (node, _) in
-            car = node as? SKSpriteNode
-            car.physicsBody?.velocity.dx = -450
-            car.physicsBody?.velocity.dy = 0
+            car5 = node as? SKSpriteNode
+            car5.physicsBody?.velocity.dx = -500
+            car5.physicsBody?.velocity.dy = 0
             
-            if car.position.x < -480{
-                car.position.x = 480
+            if car5.position.x < -480{
+                car5.position.x = 480
             }
 
         }
+        
+        enumerateChildNodes(withName: "car7") { [self]
+                         (node, _) in
+            car7 = node as? SKSpriteNode
+            car7.physicsBody?.velocity.dx = -600
+            car7.physicsBody?.velocity.dy = 0
+            
+            if car7.position.x < -900{
+                car7.position.x = 900
+            }
+
+        }
+
         
         
         
@@ -201,6 +236,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //optional for 6, special features needed
             if car6.position.x > 480{
                 car6.position.x = -480
+            }
+
+        }
+        
+        enumerateChildNodes(withName: "car8") { [self]
+                         (node, _) in
+            car8 = node as? SKSpriteNode
+            car8.physicsBody?.velocity.dx = 300
+            car8.physicsBody?.velocity.dy = 0
+            
+            if car8.position.x > 700{
+                car8.position.x = -700
             }
 
         }
