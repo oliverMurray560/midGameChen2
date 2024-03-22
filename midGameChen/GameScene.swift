@@ -25,6 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timeLabel: SKLabelNode!
     var gameTimer = 0
     var timer = Timer()
+    var debugTeleport = 0.0
 
 
     var invisFollower: SKSpriteNode!
@@ -112,8 +113,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                          (node, _) in
             car7 = node as? SKSpriteNode
             car7.texture = SKTexture(imageNamed: "car7")
-            car7.size.width = 400.0
-            car7.size.height = 60.289
+            car7.size.width = 305.364
+            car7.size.height = 185.43
             car7.physicsBody?.mass = 100000
 
         }
@@ -122,7 +123,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                          (node, _) in
             car8 = node as? SKSpriteNode
             car8.texture = SKTexture(imageNamed: "car8")
-            car8.size.width = 452.08
+            car8.size.width = 800
             car8.size.height = 127.072
             car8.physicsBody?.mass = 100000
 
@@ -174,7 +175,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enumerateChildNodes(withName: "car7") { [self]
                          (node, _) in
             car7 = node as? SKSpriteNode
-            car7.physicsBody?.velocity.dx = -600
+            car7.physicsBody?.velocity.dx = -800
             car7.physicsBody?.velocity.dy = 0
             
             if car7.position.x < -900{
@@ -246,8 +247,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             car8.physicsBody?.velocity.dx = 300
             car8.physicsBody?.velocity.dy = 0
             
-            if car8.position.x > 700{
-                car8.position.x = -700
+            if car8.position.x > 1000{
+                car8.position.x = -1000
             }
 
         }
@@ -308,6 +309,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             }
             
+        if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car7") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car7"){
+            
+            crash()
+            
+            }
+        
+        if (contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "car8") || (contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "car8"){
+            
+            crash()
+            
+            }
         
         
 
@@ -348,6 +360,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.zRotation = 0
         player.physicsBody?.allowsRotation = false
         player.position.y = -795.332
+        player.position.x = 1.456
+        invisFollower.position.y = player.position.y
+        player.removeAllActions()
+        let rotateAction = SKAction.rotate(toAngle: 0, duration: 0)
+        player.run(rotateAction)
+        invisFollower.removeAllActions()
+        gameTimer = 0
+    }
+    
+    func debugTeleportation(){
+        
+        player.physicsBody?.velocity.dx = 0
+        player.physicsBody?.velocity.dy = 0
+        gameOver = false
+        winLoseOutlet.text = ""
+        player.physicsBody?.friction = 0
+        player.zPosition = 0
+        player.zRotation = 0
+        player.physicsBody?.allowsRotation = false
+        player.position.y = debugTeleport
         player.position.x = 1.456
         invisFollower.position.y = player.position.y
         player.removeAllActions()

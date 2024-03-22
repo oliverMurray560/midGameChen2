@@ -49,6 +49,21 @@ class GameViewController: UIViewController {
     @IBAction func restartAction(_ sender: UIButton) {
         play.restart()
     }
+    
+    @IBAction func teleport1(_ sender: UIButton) {
+        play.debugTeleport = 800.0
+        play.debugTeleportation()
+    }
+    
+    @IBAction func teleport2(_ sender: UIButton) {
+        play.debugTeleport = 2800.0
+        play.debugTeleportation()
+    }
+    
+    @IBAction func teleport3(_ sender: UIButton) {
+        play.debugTeleport = 0.0
+        play.debugTeleportation()
+    }
     override var prefersStatusBarHidden: Bool {
         return true
     }
