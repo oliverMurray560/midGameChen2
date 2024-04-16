@@ -11,7 +11,7 @@ import GameplayKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var player: SKSpriteNode!
     
-    
+    var tester2 = 0
     var test = 0
     
     var car: SKSpriteNode!
